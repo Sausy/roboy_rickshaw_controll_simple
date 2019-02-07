@@ -14,12 +14,16 @@ motorCtl::motorCtl()
   motorStatus = nh->subscribe("/roboy/middleware/MotorStatus", 1, &motorCtl::GetMotorData, this);
   motorCommand = nh->advertise<roboy_middleware_msgs::MotorCommand>("/roboy/middleware/MotorCommand", 1);
 
-  roboy_middleware_msgs::MotorCommand msg_command;
+
   roboy_middleware_msgs::ControlMode msg_mode;
   msg_mode.request.control_mode = DISPLACEMENT;
+  msg.request.set_point = 1;
+
+  roboy_middleware_msgs::MotorCommand msg_command;
+  msg_command.id=3;
   for (uint motor = 0; motor < total_number_of_motors; motor++) {
     control_mode.push_back(DISPLACEMENT);
-    setpoint.push_back(0);
+    setpoint.push_back(1);
     msg_command.set_points.push_back(setpoint[motor]);
   }
   motorCommand.publish(msg_command);
@@ -48,6 +52,7 @@ void motorCtl::setPoint(double setPoint, uint motor){
 
 void motorCtl::setPointAll(double setPoint){
   roboy_middleware_msgs::MotorCommand msg_command;
+  msg_command.id=3;
   double motor_scale = 1; //TODO: change
 
   for (uint motor = 0; motor < total_number_of_motors; motor++) {

@@ -34,6 +34,10 @@ int main(int argc, char **argv){
     if(input_kb == 'r'){
       rickshaw.TurnBike_Left();
       cout << "\nangle sensor:" << rickshaw.ReadOutStearingAngle();
+      cout << "\ncurrent.data:";
+      for(int i=0; i<rickshaw.motorData->current.size();i++)
+         cout << rickshaw.motorData->current[i] << " , ";
+
       ros::spinOnce();
       loop_rate.sleep();
       ++count;

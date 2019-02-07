@@ -8,6 +8,8 @@ RickshawCtl::RickshawCtl(uint left_motor_,uint right_motor_){
 
   stearingForce_actor=300;
   stearingForce_reactor=1;
+
+  motorData = &motor_Ctl.motorData;
 };
 
 void RickshawCtl::Turn(uint actorMotorSelect_,uint reactorMotorSelect_){

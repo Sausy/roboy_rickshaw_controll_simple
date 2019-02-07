@@ -26,6 +26,8 @@ class RickshawCtl
 
     void TestMotor(double point_);
 
+    motordata *motorData;
+
 
   private:
     motorCtl motor_Ctl;
