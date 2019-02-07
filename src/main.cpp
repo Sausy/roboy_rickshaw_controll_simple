@@ -11,7 +11,7 @@
 using namespace std;
 
 int main(int argc, char **argv){
-  char input_kb;
+  char input_kb = NULL;
   int count = 0;
 
   cout << "start control";
@@ -28,24 +28,55 @@ int main(int argc, char **argv){
   RickshawCtl rickshaw(9,10); //currently motor9 and 10 are used to stear
 
 
-  cout << "please enter command\n";
   while (ros::ok())
   {
-    cin >> input_kb;
-    if(input_kb == 't')
-      rickshaw.TestMotor(200);
-    if(input_kb == 'o')
-        rickshaw.TestMotor(0);
 
-    rickshaw.TurnBike_Left();
-    cout << "angle sensor:" << rickshaw.ReadOutStearingAngle();
+    if(input_kb == 'r'){
+      rickshaw.TurnBike_Left();
+      cout << "\nangle sensor:" << rickshaw.ReadOutStearingAngle();
+      ros::spinOnce();
+      loop_rate.sleep();
+      ++count;
+      if (count >= 1000)
+        break;
+    }else{
+      cout << "please enter command \n";
+      cout << "r=readoutAngle t=testMotor o=allMotorsOff k=exit\n";
+      cin >> input_kb;
+      if(input_kb == 't')
+        rickshaw.TestMotor(200);
+      if(input_kb == 'o')
+          rickshaw.TestMotor(0);
+      if(input_kb == 'k')
+          break;
+    }
 
-    ros::spinOnce();
-    loop_rate.sleep();
-    ++count;
-    if (count >= 1000)
-      break;
+
   }
 
   return 0;
 }
+
+
+/*
+
+if(input_kb == 'r'){
+  rickshaw.TurnBike_Left();
+  cout << "angle sensor:" << rickshaw.ReadOutStearingAngle();
+  ros::spinOnce();
+  loop_rate.sleep();
+  ++count;
+  if (count >= 1000)
+    break;
+}else{
+  cout << "please enter command \n";
+  cout << "r=readoutAngle t=testMotor o=allMotorsOff\n";
+  cin >> input_kb;
+  if(input_kb == 't')
+    rickshaw.TestMotor(200);
+  if(input_kb == 'o')
+      rickshaw.TestMotor(0);
+}
+
+
+*/
