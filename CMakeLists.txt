@@ -35,11 +35,12 @@ include_directories(
 #==============================================================================
 # Application
 #==============================================================================
+FILE(GLOB SRC_FILES src/*.cpp)
+FILE(GLOB INCLUDE_FILES include/*.hpp)
+
 add_executable( roboy_rickshaw_controll_simple
-        src/main.cpp
-        src/rickshaw_ctl.cpp
-        include/common.hpp
-        include/rickshaw_ctl.hpp
+        ${SRC_FILES}
+        ${INCLUDE_FILES}
         )
 add_dependencies(roboy_rickshaw_controll_simple roboy_middleware_msgs_gencpp roboy_control_msgs_gencpp)
 target_link_libraries( roboy_rickshaw_controll_simple -lpthread -lrt ${catkin_LIBRARIES})

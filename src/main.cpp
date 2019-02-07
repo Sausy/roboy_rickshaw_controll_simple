@@ -11,13 +11,13 @@
 using namespace std;
 
 int main(int argc, char **argv){
+  char input_kb;
+  int count = 0;
+
   cout << "start control";
 
-
-  RickshawCtl rickshaw;
-
   //init ros
-  if (!ros::isInitialized()) {
+  if (!ros::isInitialized()){
     int argc = 0;
     char **argv = NULL;
     ros::init(argc, argv, "rickshaw_ctl_node");
@@ -25,12 +25,20 @@ int main(int argc, char **argv){
   ros::NodeHandle n;
   ros::Rate loop_rate(10);
 
-  int count = 0;
+  RickshawCtl rickshaw(9,10); //currently motor9 and 10 are used to stear
+
+
+  cout << "please enter command\n";
   while (ros::ok())
   {
-    cout << "please enter command\n";
+    cin >> input_kb;
+    if(input_kb == 't')
+      rickshaw.TestMotor(200);
+    if(input_kb == 'o')
+        rickshaw.TestMotor(0);
 
-    //rickshaw.setPointAll(20);
+    rickshaw.TurnBike_Left();
+    cout << "angle sensor:" << rickshaw.ReadOutStearingAngle();
 
     ros::spinOnce();
     loop_rate.sleep();

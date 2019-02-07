@@ -1,54 +1,36 @@
 #include <rickshaw_ctl.hpp>
 
-RickshawCtl::RickshawCtl()
-{
-  total_number_of_motors = 14;
 
+//uint8_t actorMotorSelect, reactorMotorSelect;
+RickshawCtl::RickshawCtl(uint left_motor_,uint right_motor_){
+  left_motor=left_motor_;
+  right_motor=right_motor_;
 
-  if (!ros::isInitialized()) {
-    int argc = 0;
-    char **argv = NULL;
-    ros::init(argc, argv, "rickshaw_ctl_node");
-  }
-  nh = ros::NodeHandlePtr(new ros::NodeHandle);
+  stearingForce_actor=300;
+  stearingForce_reactor=1;
+};
 
-
-  motorStatus = nh->subscribe("/roboy/middleware/MotorStatus", 1, &RickshawCtl::GetMotorData, this);
-  motorCommand = nh->advertise<roboy_middleware_msgs::MotorCommand>("/roboy/middleware/MotorCommand", 1);
-
-
-  roboy_middleware_msgs::MotorCommand msg_command;
-  roboy_middleware_msgs::ControlMode msg_mode;
-  msg_mode.request.control_mode = DISPLACEMENT;
-  for (uint motor = 0; motor < total_number_of_motors; motor++) {
-    //control_mode[0] = DISPLACEMENT;
-    //setpoint[motor] = 0;
-    /*msg_command.set_points.push_back(setpoint[motor]);*/
-  }
-  //motorCommand.publish(msg_command);*/
+void RickshawCtl::Turn(uint actorMotorSelect_,uint reactorMotorSelect_){
+  motor_Ctl.setPoint(stearingForce_actor,actorMotorSelect_);
+  motor_Ctl.setPoint(stearingForce_reactor,reactorMotorSelect_);
 }
 
-void RickshawCtl::GetMotorData(const roboy_middleware_msgs::MotorStatus::ConstPtr &msg){
-    //msg->position[motor];
-    //msg->velocity[motor];
-    //msg->displacement[motor];
-    //msg->current[motor];
-    motor_data[0] = msg->current[12];
-
-    ROS_INFO("\n%d", motor_data[0]);
+void RickshawCtl::TurnBike_Left(){
+  Turn(right_motor,left_motor);
 }
 
-void RickshawCtl::setPoint(double setPoint, uint motor){
-    setpoint[motor] = setPoint;
-    setPointAll(setPoint);
+void RickshawCtl::TurnBike_Right(){
+    Turn(left_motor,right_motor);
 }
 
-void RickshawCtl::setPointAll(double setPoint){
-  roboy_middleware_msgs::MotorCommand msg;
-  double motor_scale = 1; //TODO: change
+void RickshawCtl::TestMotor(double point_){
+  motor_Ctl.setPointAll(point_);
+}
 
-  for (uint motor = 0; motor < total_number_of_motors; motor++) {
-    msg.set_points.push_back(setpoint[motor]);
+int RickshawCtl::ReadOutStearingAngle(){
+  for (uint cnt = 0; cnt < A1339_Ctl.StearingData.size(); cnt++) {
+    if(A1339_Ctl.StearingData[cnt] > 0)
+      return(A1339_Ctl.StearingData[cnt]);
   }
-  motorCommand.publish(msg);
+  return 0;
 }

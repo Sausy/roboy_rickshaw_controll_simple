@@ -10,27 +10,31 @@
 #include <common_utilities/MotorConfig.hpp>
 #include <std_srvs/SetBool.h>
 
+#include "A1339_controll.hpp"
+#include "motor_controll.hpp"
+
 using namespace std;
 
 class RickshawCtl
 {
   public:
-    RickshawCtl ();
+    RickshawCtl (uint left_motor_,uint right_motor_);
 
-    ros::NodeHandlePtr nh;
-    ros::Subscriber motorStatus;
-    ros::Publisher motorCommand;
-    ros::ServiceClient motorControl[6], motorConfig[6], emergencyStop[6];
+    void TurnBike_Left();
+    void TurnBike_Right();
+    int ReadOutStearingAngle();
 
-    void GetMotorData(const roboy_middleware_msgs::MotorStatus::ConstPtr &msg);
+    void TestMotor(double point_);
 
-    void setPointAll(double setPoint);
-    void setPoint(double setPoint, uint motor);
 
   private:
-    bool stopButton;
-    vector<double> setpoint;
-    vector<int> control_mode;
-    double motor_data[4];
-    int total_number_of_motors = 0, number_of_fpgas = 6;
+    motorCtl motor_Ctl;
+    A1339Ctl A1339_Ctl;
+    vector<double> motorData_point;
+    vector<int> motorData_mode;
+    uint left_motor, right_motor;
+
+    double stearingForce_actor=300, stearingForce_reactor=1;
+
+    void Turn(uint actorMotorSelect_,uint reactorMotorSelect_);
 };
