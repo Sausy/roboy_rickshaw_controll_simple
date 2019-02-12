@@ -15,6 +15,7 @@
 
 using namespace std;
 
+
 class RickshawCtl
 {
   public:
@@ -23,11 +24,12 @@ class RickshawCtl
     void TurnBike_Left();
     void TurnBike_Right();
     int ReadOutStearingAngle();
+    void update_config();
 
     void TestMotor(double point_);
 
     motordata *motorData;
-
+    MotorConfigData *motorConfigData;
 
   private:
     motorCtl motor_Ctl;

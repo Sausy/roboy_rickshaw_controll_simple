@@ -30,7 +30,6 @@ int main(int argc, char **argv){
 
   while (ros::ok())
   {
-
     if(input_kb == 'r'){
       rickshaw.TurnBike_Left();
       cout << "\nangle sensor:" << rickshaw.ReadOutStearingAngle();
@@ -63,6 +62,8 @@ int main(int argc, char **argv){
 
 
 /*
+roboy_middleware_msgs::MotorConfigService msg_Config;
+msg_Config.request.config.kp.push_back(Kp);
 
 if(input_kb == 'r'){
   rickshaw.TurnBike_Left();
