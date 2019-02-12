@@ -24,6 +24,7 @@ int32[] rev_counter
 */
 
 void A1339Ctl::GetStearingData(const roboy_middleware_msgs::MotorAngle::ConstPtr &msg){
+  ROS_INFO("Ros Info: %d", msg);
   StearingData.clear();
   for (uint cnt = 0; cnt < msg->raw_angles.size(); cnt++) {
     StearingData.push_back(msg->raw_angles[cnt]);
